@@ -42,15 +42,12 @@ def get_exams_by_month(session,html_content,class_year,school,month):
         if month_name == month:
             month_data = month_content
             break
-    print(month_name)
     for data1 in month_data.find_all('div',{'class':'row'}):
-        print(data1,type(data1))
         temp = []
         date = data1.find("div",{"class":"cell"}).text
         box = data1.find("div",{"class":"box"})
         temp.append(date)
         try:
-            print(date,box.contents)
             for content in box.contents:
                 if content.text != '\n':
                     temp.append(content.text)

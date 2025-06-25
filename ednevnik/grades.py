@@ -1,33 +1,28 @@
 import requests
 from bs4 import BeautifulSoup
+import re
 
 def get_current_grades(html_content):
     grades_info = html_content.find_all("div", {'aria-label': 'NewGradesTable'})
     grades = dict()
     dates = dict()
+    pattern = r'^\d+\.\d+\.$'
     for grade_info in grades_info:
         subject_title = grade_info.attrs['data-action-id']
         grades[subject_title] = []
-        dates[subject_title] = []
-        # print(f"{subject_title}")
-        info = grade_info.find_all("div", {"class": "cell"})
-        for grade in info:
-            # print(f"{grade.contents}\n")
-            grade_content = grade.find("span")
-            try:
-                final_grade = str(grade_content.text)
-                possible_chars = '0123456789'
-                if any(char in final_grade for char in possible_chars) and any(
-                        char in final_grade for char in "abcdefghijklmnoprstuvz") == False:
-                    # print(final_grade)
-                    if final_grade.isdigit():
-                        grades[subject_title].append(final_grade)
-                    else:
-                        dates[subject_title].append(final_grade)
-                    prev = final_grade
-            except:
-                pass
-    return grades,dates
+        rows = grade_info.find_all("div",{"class":"row"})
+        for row in rows:
+            temp = []
+            date = row.find("div", {"class": "cell"}).text
+            if re.match(pattern,date):
+                print(date)
+                temp.append(date)
+                box = row.find("div",{"class":"box"})
+                for item in box:
+                    if item.text != "\n":
+                        temp.append(item.text)
+                grades[subject_title].append(temp)
+        return grades
 def get_year_grades(html_content,class_year,school,session,url):
     year_data = html_content.find_all("a",{"class":"school-data"})
     classes = dict()

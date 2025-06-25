@@ -18,7 +18,7 @@ class Ednevnik():
                    'csrf_token': value}
         response = self.session.post(self.url + "login", data=payload)
         html = self.session.get(self.url + "grade/all")
-    def get_current_grades(self): # Gets the grades from the current year
+    def get_current_grades(self): # Gets the grades from the current year in the following format: CLASS:[[DATE,GRADE_NOTE,FIELD,GRADE]]
         html = self.session.get(self.url + "grade/all")
         soup = BeautifulSoup(html.content, "html.parser")
         return get_current_grades(html_content=soup)
