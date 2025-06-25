@@ -1,5 +1,6 @@
 from .grades import get_current_grades,get_year_grades
 from .exams import get_current_exams,get_exams_by_month,get_exams_by_class
+from .basic_info import get_class_years
 import requests
 from bs4 import BeautifulSoup
 
@@ -37,4 +38,8 @@ class Ednevnik():
         html = self.session.get(self.url + "class")
         soup = BeautifulSoup(html.content,"html.parser")
         return get_exams_by_class(session=self.session,html_content=soup,class_year=class_year,school=school)
+    def get_class_years(self):
+        html = self.session.get(self.url+"class")
+        soup = BeautifulSoup(html.content,"html.parser")
+        return get_class_years(html_content=soup)
 __all__ = ['Ednevnik']
