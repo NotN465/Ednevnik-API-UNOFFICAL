@@ -1,6 +1,7 @@
 from .grades import get_current_grades,get_year_grades
 from .exams import get_current_exams,get_exams_by_month,get_exams_by_class
 from .basic_info import get_class_years
+from .absences import get_absences_from_class_year,get_absences_from_month
 import requests
 from bs4 import BeautifulSoup
 
@@ -42,4 +43,12 @@ class Ednevnik():
         html = self.session.get(self.url+"class")
         soup = BeautifulSoup(html.content,"html.parser")
         return get_class_years(html_content=soup)
+    def get_absences_from_class_year(self,class_year,school): # Gets all the absences of a specified class year and school, returns the following format: dict(MONTH:[[DAY,NUMBER_OF_ABSENCES]])
+        html = self.session.get(self.url + "class")
+        soup = BeautifulSoup(html.content, "html.parser")
+        return get_absences_from_class_year(html_content=soup,session=self.session,class_year=class_year,school=school)
+    def get_absences_from_month(self,class_year,school,month): # Gets all the absences of a specified month, returns the following format: dict(MONTH:[[DAY,NUMBER_OF_ABSENCES]])
+        html = self.session.get(self.url + "class")
+        soup = BeautifulSoup(html.content, "html.parser")
+        return get_absences_from_month(html_content=soup,session=self.session,class_year=class_year,school=school,month=month)
 __all__ = ['Ednevnik']
