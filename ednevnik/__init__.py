@@ -1,6 +1,6 @@
 from .grades import get_current_grades,get_year_grades
 from .exams import get_current_exams,get_exams_by_month,get_exams_by_class
-from .basic_info import get_class_years, get_personal_data
+from .basic_info import get_class_years, get_personal_data,get_notes_tab
 from .absences import get_absences_from_class_year,get_absences_from_month
 import requests
 from bs4 import BeautifulSoup
@@ -55,4 +55,8 @@ class Ednevnik():
         html = self.session.get(self.url + "personal_data")
         soup = BeautifulSoup(html.content, "html.parser")
         return get_personal_data(html_content=soup)
+    def get_personal_data(self):
+        html = self.session.get(self.url + "notes")
+        soup = BeautifulSoup(html.content, "html.parser")
+        return get_notes_tab(html_content=soup)
 __all__ = ['Ednevnik']
