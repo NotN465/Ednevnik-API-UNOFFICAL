@@ -16,3 +16,14 @@ def get_class_years(html_content):
         except:
             pass
     return data
+def get_personal_data(html_content):
+    student_data = html_content.find_all('div',{"class":"l-two-columns"})
+    personal_data =dict()
+    for student in student_data:
+        column_data = student.find_all('span',{"class":"column"})
+        temp = []
+        for column in column_data:
+            column_text = str(column.text).strip().replace('\n','')
+            temp.append(column_text)
+        personal_data[temp[0]] = temp[1]
+    return personal_data
